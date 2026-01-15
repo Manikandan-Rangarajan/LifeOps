@@ -42,3 +42,27 @@ export const getEvent = async (req,res)=>{
         return res.status(500).json({message:"Internal server error"})
     }
 }
+
+export const updateEvent = async (req,res)=>{
+    try{
+        const userId = req.user.userId
+        const {id} = req.params
+        
+        const event = await Planner.findOneAndUpdate(
+            {_id: id,userId},
+            {completed:true},
+            {new:true}
+        )
+        if(!event){
+            return res.status(404).json({message:"Event not found"})
+        }
+
+        res.status(200).json({
+            message:"Event marked as completed",
+            event
+        })
+    }catch(err){
+        console.error(err)
+        return res.status(500).json({message:"Internal server error"})
+    }
+}
