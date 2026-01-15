@@ -25,6 +25,10 @@ const userDb = new mongoose.Schema({
     completed:{
         type: Boolean,
         default: false
+    },
+    reminded:{
+        type: Boolean,
+        default:false
     }
 },
     {timestamps:true}
