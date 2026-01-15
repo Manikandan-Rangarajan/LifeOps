@@ -14,7 +14,7 @@ export const createEvent = async (req,res)=>{
             description,
             eventTime,
             remindBefore,
-
+            expiresAt: new Date(eventTime.getTime()+ 5 * 24 * 60 * 60 * 1000)
         })
         console.log('REQ.USER:', req.user)
         res.status(201).json({

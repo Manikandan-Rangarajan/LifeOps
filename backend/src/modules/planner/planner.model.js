@@ -29,9 +29,25 @@ const userDb = new mongoose.Schema({
     reminded:{
         type: Boolean,
         default:false
+    },
+    expiresAt:{
+        type: Date
     }
 },
     {timestamps:true}
+)
+
+//Cron index
+userDb.index({
+    reminded: 1,
+    completed: 1,
+    eventTime: 1
+})
+
+//TTl index
+userDb.index(
+    {expiresAt:1},
+    {expiresAfterSeconds:0}
 )
 
 export default mongoose.model('Planner',userDb)
