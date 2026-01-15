@@ -9,7 +9,7 @@ export const protect = (req,res,next)=>{
         }    
         const token = authHeader.split(' ')[1]
         const decoded = jwt.verify(token,process.env.JWT_SECRET_KEY)
-        // req.user = {userId:decoded.userId}
+        req.user = {userId:decoded.userId}
         next()
     }catch(err){
         console.error(err)

@@ -27,3 +27,18 @@ export const createEvent = async (req,res)=>{
         return res.status(500).json({message:"internal server error"})
     }
 }
+
+export const getEvent = async (req,res)=>{
+    try{
+        const userId = req.user.userId
+        const events = await Planner.find({userId})
+        .sort({eventTime:1})
+        res.status(200).json({
+            count: events.length,
+            events
+        })
+    }catch(err){
+        console.error(err);
+        return res.status(500).json({message:"Internal server error"})
+    }
+}
