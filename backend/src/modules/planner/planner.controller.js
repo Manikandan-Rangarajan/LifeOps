@@ -1,4 +1,5 @@
 import Planner from './planner.model.js'
+import mongoose from 'mongoose'
 
 export const createEvent = async (req, res) => {
   try {
@@ -116,6 +117,33 @@ export const completeEvent = async (req,res)=>{
       message:"Event marked as completed",
       event
     })
+
+  }catch(err){
+    console.error(err)
+    return res.status(500).json({message:"Internal server error"})
+  }
+}
+
+export const deleteEvent = async (req,res)=>{
+  try{
+    console.log("entered delete blk")
+  const userId = new mongoose.Types.ObjectId(req.user.userId)
+  const {id} = req.params
+
+  const event = await Planner.findOneAndDelete(
+    {_id:id,userId}
+  )
+    console.log("passed the event inscan")
+  if(!event){
+    console.log(event)
+    event
+    return res.status(404).json({message:"Event not found"})
+  }
+    console.log("passed the block")
+  res.status(200).json({
+    message:"Event deleted successfully",
+    event
+  })
 
   }catch(err){
     console.error(err)
