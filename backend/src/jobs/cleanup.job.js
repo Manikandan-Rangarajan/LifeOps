@@ -1,12 +1,17 @@
 import {startReminderJobs} from './reminder.job.js'
+import dotenv from "dotenv"
+dotenv.config()
+
+//const ENABLE_REMINDER = "true"
 
 export const startJobs = ()=>{
-  console.log("🛠️ Starting background jobs...");
-
-  if(process.env.ENABLE_REMINDERS=="true"){
+  console.log("🛠️ Starting background jobs..."); 
+  if (process.env.ENABLE_REMINDER==="true") {
+  console.log("cron is working")
     startReminderJobs()
-    console.log("✅ Reminder job started")
-  }else{
-    console.log("⛔ Reminder job disabled")
-  }
+}else{
+  console.log("⛔ Reminder job disabled via env");
+  return;
+}
+
 }
