@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 
 export const protect = (req,res,next)=>{
     try{
-         console.log('JWT SECRET ===>', process.env.JWT_SECRET_KEY)
+         // console.log('JWT SECRET ===>', process.env.JWT_SECRET_KEY)
         const authHeader = req.headers.authorization
         if(!authHeader || !authHeader.startsWith('Bearer ')){
             return res.status(401).json({message:'Not Authorised'})

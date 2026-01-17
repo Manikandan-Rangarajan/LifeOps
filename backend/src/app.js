@@ -4,6 +4,7 @@ import cors from "cors"
 import routes from './auth/auth.routes.js'
 import {protect} from './common/middleware/auth.middleware.js'
 import plannerRoutes from "./modules/planner/planner.routes.js"
+import recurringRoutes from './modules/recurring/recurring.routes.js'
 
 const app = express() 
 
@@ -11,6 +12,7 @@ app.use(cors())
 app.use(express.json())
 app.use('/api',routes)
 app.use('/api/planner',plannerRoutes)
+app.use('/api/recurring',recurringRoutes)
 
 app.get('/',(req,res)=>{
     res.json({status:'ok'})
