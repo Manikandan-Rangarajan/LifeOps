@@ -5,6 +5,7 @@ import {protect} from './common/middleware/auth.middleware.js'
 import plannerRoutes from "./modules/planner/planner.routes.js"
 import recurringRoutes from './modules/recurring/recurring.routes.js'
 import habitRoutes from "./modules/habits/habits.routes.js"
+import bookRoutes from "./modules/books/book.routes.js"
 
 const app = express() 
 
@@ -14,7 +15,7 @@ app.use('/api',routes)
 app.use('/api/planner',plannerRoutes)
 app.use('/api/recurring',recurringRoutes)
 app.use('/api/habit',habitRoutes)
-
+app.use('/api/book', bookRoutes)
 app.get('/',(req,res)=>{
     res.json({status:'ok'})
 })

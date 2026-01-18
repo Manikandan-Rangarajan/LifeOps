@@ -20,6 +20,15 @@ const bookSchema = new mongoose.Schema(
     tags:{
       type: [String],
       immutable: true
+    },
+    createdBy:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    verified:{
+      type:Boolean,
+      default: false
     }
   },
   {timestamps:true}
