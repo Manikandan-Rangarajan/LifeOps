@@ -168,3 +168,78 @@ export const getBookById = async(req,res)=>{
     return res.status(500).json({message:"Internal server error"})
   }
 }
+
+export const getReadingState = async(req,res)=>{
+  try{
+    const bookId = req.params.bookId
+    const userId = req.user.userId
+
+    const state = await ReadingState.findOne({bookId,userId})
+    if(!state){
+      return res.status(404).json({message:"ReadingState not found"})
+    }
+    res.status(200).json({
+      state
+    })
+  }catch(err){
+    console.error(err)
+    return res.status(500).json({message:"Internal server error"})
+  }
+}
+
+
+export const getCompletedBooks = async(req,res)=>{
+  try{
+    const userId = req.user.userId
+    const completedBooks = await ReadingState.findById({
+      userId,
+      status:'FINISHED'
+    })
+
+    res.status(200).json({
+      count:completedBooks.length,
+      completedBooks
+    })
+  }catch(err){
+    console.error(err)
+    return res.status(500).json({message:"Internal server error"})
+  }
+}
+
+export const getCurrentlyReadingBooks = async(req,res)=>{
+  try{
+    const userId = req.user.userId
+    const currentlyReadingBooks = await ReadingState.find({
+      userId,
+      status: 'READING'
+    })
+    res.status(200).json({
+      count:currentlyReadingBooks.length,
+        currentlyReadingBooks
+    })
+  }catch(err){
+    console.error(err)
+    return res.status(500).json({message:"Internal server error"})
+  }
+}
+
+export const getMyReadingSessions = async(req,res)=>{
+  try{
+    const bookId = req.params.bookId
+    const userId = req.user.userId
+
+    const sessions = await ReadingSession.find({
+      userId,
+      bookId
+    }).sort({date:1})
+
+   // sessions.sort((a,b)=>a-b)
+    res.status(200).json({
+      count: sessions.length,
+      sessions
+    })
+  }catch(err){
+    console.error(err)
+    return res.status(500).json({message:"Internal server error"})
+  }
+}
