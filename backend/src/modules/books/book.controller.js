@@ -173,11 +173,17 @@ export const getReadingState = async(req,res)=>{
   try{
     const bookId = req.params.bookId
     const userId = req.user.userId
-
+    if (!userId) {console.log("No user id")}
     const state = await ReadingState.findOne({bookId,userId})
-    if(!state){
-      return res.status(404).json({message:"ReadingState not found"})
-    }
+    if (!state) {
+  return res.status(200).json({
+    state: {
+      status: "NOT_STARTED",
+      currentPage: 0,
+    },
+  });
+}
+
     res.status(200).json({
       state
     })
@@ -191,7 +197,7 @@ export const getReadingState = async(req,res)=>{
 export const getCompletedBooks = async(req,res)=>{
   try{
     const userId = req.user.userId
-    const completedBooks = await ReadingState.findById({
+    const completedBooks = await ReadingState.find({
       userId,
       status:'FINISHED'
     })
