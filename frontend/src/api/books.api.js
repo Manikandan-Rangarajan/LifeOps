@@ -8,6 +8,8 @@ API.interceptors.response.use(
   (res) => res,
   (err) => {
     // ONLY logout on explicit 401
+    console.log("Axios error:", err.response?.status, err.config?.url);
+
     if (err.response?.status === 401) {
       localStorage.removeItem("token");
       window.location.href = "/login";
