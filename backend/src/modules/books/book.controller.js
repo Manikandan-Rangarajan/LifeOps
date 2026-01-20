@@ -191,9 +191,9 @@ export const getReadingState = async(req,res)=>{
 export const getCompletedBooks = async(req,res)=>{
   try{
     const userId = req.user.userId
-    const completedBooks = await ReadingState.findById({
+    const completedBooks = await ReadingState.find({
       userId,
-      status:'FINISHED'
+      status:'FINISHED' 
     })
 
     res.status(200).json({
