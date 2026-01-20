@@ -1,5 +1,3 @@
-// button redirects to login for no reason --> pls fix
-
 import { useNavigate } from "react-router-dom";
 import { startReading } from "../api/books.api";
 import Badge from "./Badge";

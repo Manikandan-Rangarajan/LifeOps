@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   getBookById,
   getReadingState,
@@ -9,36 +10,50 @@ import {
 } from "../api/books.api";
 
 export default function BookDetail() {
+
   const { id } = useParams();
+  const navigate = useNavigate();
   const [book, setBook] = useState(null);
   const [state, setState] = useState(null);
   const [sessions, setSessions] = useState([]);
   const [endPage, setEndPage] = useState("");
   const [notes, setNotes] = useState("");
 
+
   useEffect(() => {
-    const load = async () => {
-      const b = await getBookById(id);
-      setBook(b.data.book);
+  const load = async () => {
+    const b = await getBookById(id);
+    setBook(b.data.book);
 
-      try {
-        const s = await getReadingState(id);
-        setState(s.data.state);
-
-        const sess = await getMySessions(id);
-        setSessions(sess.data.sessions);
-      } catch {
-        setState(null);
+    try {
+      const s = await getReadingState(id);
+      setState(s.data.state);
+    } catch (err) {
+      if (err.response?.status === 404) {
+        setState({ status: "NOT_STARTED", currentPage: 0 });
       }
-    };
-    load();
-  }, [id]);
+    }
+
+    try {
+      const sess = await getMySessions(id);
+      setSessions(sess.data.sessions);
+    } catch (err) {
+      if (err.response?.status === 404) {
+        setSessions([]); // no sessions yet is NORMAL
+      }
+    }
+  };
+
+  load();
+}, [id]);
+
 
   if (!book) return <div className="p-6">Loading...</div>;
 
   const handleStart = async () => {
     const res = await startReading(id);
     setState(res.data.state);
+    console.log(res.data.state);
   };
 
   const handleLog = async () => {
@@ -56,6 +71,13 @@ export default function BookDetail() {
   return (
     <div className="min-h-screen bg-gray-100 px-6 py-8">
       <div className="mx-auto max-w-3xl space-y-6">
+        <button
+  onClick={() => navigate("/books")}
+  className="mb-4 flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-gray-900"
+>
+  ← Back to Books
+</button>
+
         <div className="rounded-xl bg-white p-6 shadow">
           <h1 className="text-2xl font-semibold">{book.title}</h1>
           <p className="text-gray-600">{book.author}</p>
