@@ -12,7 +12,7 @@ const accountSchema = new mongoose.Schema(
       required: true
     },
     type:{
-      type:String
+      type:String,
       enum:['CASH','BANK','CARD','WALLET','STOCKS','MFS'],
       required: true,
       default:'CASH'

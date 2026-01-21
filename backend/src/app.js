@@ -6,6 +6,8 @@ import plannerRoutes from "./modules/planner/planner.routes.js"
 import recurringRoutes from './modules/recurring/recurring.routes.js'
 import habitRoutes from "./modules/habits/habits.routes.js"
 import bookRoutes from "./modules/books/book.routes.js"
+import accountRoutes from "./modules/finance/account/account.routes.js"
+import transactionRoutes from "./modules/finance/transaction/transaction.routes.js"
 
 const app = express() 
 
@@ -16,6 +18,8 @@ app.use('/api/planner',plannerRoutes)
 app.use('/api/recurring',recurringRoutes)
 app.use('/api/habit',habitRoutes)
 app.use('/api/book', bookRoutes)
+app.use('/api/finance/account',accountRoutes)
+app.use('/api/finance/transaction',transactionRoutes)
 app.get('/',(req,res)=>{
     res.json({status:'ok'})
 })
