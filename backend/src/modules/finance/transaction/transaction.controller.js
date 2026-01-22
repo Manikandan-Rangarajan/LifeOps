@@ -25,7 +25,7 @@ export const appendTransaction = async (req,res)=>{
       type,
       category,
       note,
-      date
+      date:new Date(date)
     })
 
     res.status(201).json({
@@ -37,3 +37,46 @@ export const appendTransaction = async (req,res)=>{
     return res.status(500).json({message:"Internal server error"})
   }
 }
+
+export const getTransactions = async(req,res)=>{
+  try{
+    const userId = req.user.userId
+    const filter = { userId }
+    const { kind, year, month } = req.query
+    const page = Math.max(parseInt(req.query.page)||1,1)
+    const limit = Math.min(parseInt(req.query.limit)||20,100)
+    const skip = (page-1)*limit
+
+    if(kind==='expense'){
+      filter.amount = {$lt:0}
+    }
+    if(kind==='income'){
+      filter.amount = {$gt:0}
+    }
+    if(month && year){
+      const start = new Date(year,month-1,1)
+      const end = new Date(year,month,1)
+      filter.date = {$gte:start,$lt:end}
+    }
+
+    const [transactions,total] = await Promise.all([
+      Transaction.find(filter)
+      .sort({date:-1})
+      .skip(skip)
+      .limit(limit),
+      Transaction.countDocuments(filter)
+    ])
+    res.status(200).json({
+      page,
+      limit,
+      total,
+      totalPages: Math.ceil(total/limit),
+      count: transactions.length,
+      transactions
+    })
+  }catch(err){
+    console.error(err)
+    return res.status(500).json({message:"Internal server error"})
+  }
+}
+

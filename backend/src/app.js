@@ -8,6 +8,7 @@ import habitRoutes from "./modules/habits/habits.routes.js"
 import bookRoutes from "./modules/books/book.routes.js"
 import accountRoutes from "./modules/finance/account/account.routes.js"
 import transactionRoutes from "./modules/finance/transaction/transaction.routes.js"
+import analyticsRoutes from "./modules/finance/analytics/analytics.routes.js"
 
 const app = express() 
 
@@ -20,6 +21,7 @@ app.use('/api/habit',habitRoutes)
 app.use('/api/book', bookRoutes)
 app.use('/api/finance/account',accountRoutes)
 app.use('/api/finance/transaction',transactionRoutes)
+app.use('/api/finance/analytics',analyticsRoutes)
 app.get('/',(req,res)=>{
     res.json({status:'ok'})
 })
