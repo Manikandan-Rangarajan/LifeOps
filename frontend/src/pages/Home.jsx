@@ -32,14 +32,14 @@ export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-200 to-slate-300 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-500 to-slate-800 p-6">
       {/* Header */}
       <div className="mb-12 text-center">
         <h1 className="text-5xl font-extrabold text-gray-800 tracking-tight">
           LifeOps
         </h1>
-        <p className="text-xl text-gray-600 mt-3">
-          Your personal operating system
+        <p className="text-xl text-gray-900 mt-3">
+          Your personal management system
         </p>
       </div>
 

@@ -35,8 +35,8 @@ export default function DietSummary() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-600">
-        Loading diet summary...
+      <div className="min-h-screen flex items-center justify-center text-slate-400">
+        Loading diet summary…
       </div>
     );
   }
@@ -53,14 +53,21 @@ export default function DietSummary() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-100 p-6 space-y-6">
+    <div className="p-6 space-y-8">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Today</h1>
+        <h1 className="text-3xl font-bold text-slate-200">
+          Today
+        </h1>
 
         <button
           onClick={() => navigate("/diet/log/new")}
-          className="px-4 py-2 bg-black text-white rounded-lg"
+          className="
+            px-4 py-2 rounded-lg
+            bg-emerald-500 text-black font-semibold
+            hover:bg-emerald-400
+            transition active:scale-95
+          "
         >
           + Log Food
         </button>
@@ -74,28 +81,42 @@ export default function DietSummary() {
         <Stat label="Fats" value={`${totals.fats} g`} />
       </div>
 
+      {/* Recipes Shortcut */}
       <div
-  onClick={() => navigate("/diet/recipes")}
-  className="cursor-pointer bg-white rounded-2xl p-4 shadow
-             hover:shadow-lg transition"
->
-  <p className="text-lg font-semibold">Recipes</p>
-  <p className="text-sm text-gray-500">
-    Browse all recipes
-  </p>
-</div>
-
+        onClick={() => navigate("/diet/recipes")}
+        className="
+          cursor-pointer rounded-xl
+          border border-slate-700 bg-slate-800
+          p-4 transition
+          hover:translate-y-[-2px] hover:border-slate-600
+          active:scale-95
+        "
+      >
+        <p className="text-lg font-semibold text-slate-100">
+          Recipes
+        </p>
+        <p className="text-sm text-slate-400">
+          Browse all recipes
+        </p>
+      </div>
 
       {/* Today Logs */}
-      <div className="bg-white rounded-xl shadow p-4">
-        <h2 className="font-semibold mb-3">Today’s Logs</h2>
+      <div className="rounded-xl border border-slate-700 bg-slate-800 p-4">
+        <h2 className="font-semibold text-slate-100 mb-3">
+          Today’s Logs
+        </h2>
 
         {logs.length === 0 ? (
-          <p className="text-sm text-gray-500">No food logged today.</p>
+          <p className="text-sm text-slate-400">
+            No food logged today.
+          </p>
         ) : (
           <div className="space-y-2 text-sm">
             {logs.map((l) => (
-              <div key={l._id} className="flex justify-between">
+              <div
+                key={l._id}
+                className="flex justify-between text-slate-300"
+              >
                 <span>{l.mealType}</span>
                 <span>{l.calories} kcal</span>
               </div>
@@ -105,8 +126,10 @@ export default function DietSummary() {
       </div>
 
       {/* Monthly Analytics */}
-      <div className="bg-white rounded-xl shadow p-4">
-        <h2 className="font-semibold mb-3">This Month</h2>
+      <div className="rounded-xl border border-slate-700 bg-slate-800 p-4">
+        <h2 className="font-semibold text-slate-100 mb-3">
+          This Month
+        </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
           <MiniStat label="Avg" value={`${monthly.averageCalories} kcal`} />
@@ -119,11 +142,24 @@ export default function DietSummary() {
   );
 }
 
+/* ---------- Components ---------- */
+
 function Stat({ label, value }) {
   return (
-    <div className="bg-white rounded-xl shadow p-4 text-center">
-      <p className="text-sm text-gray-500">{label}</p>
-      <p className="text-lg font-semibold">{value}</p>
+    <div
+      className="
+        rounded-xl border border-slate-700 bg-slate-800
+        p-4 text-center
+        transition
+        hover:translate-y-[-2px] hover:border-slate-600
+      "
+    >
+      <p className="text-sm text-slate-400">
+        {label}
+      </p>
+      <p className="text-lg font-semibold text-slate-100">
+        {value}
+      </p>
     </div>
   );
 }
@@ -131,8 +167,12 @@ function Stat({ label, value }) {
 function MiniStat({ label, value }) {
   return (
     <div>
-      <p className="text-xs text-gray-500">{label}</p>
-      <p className="font-semibold">{value}</p>
+      <p className="text-xs text-slate-400">
+        {label}
+      </p>
+      <p className="font-semibold text-slate-100">
+        {value}
+      </p>
     </div>
   );
 }

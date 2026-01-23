@@ -1,53 +1,29 @@
-import axios from "axios";
+import api from "./axios"; // adjust path if needed
 
-const API = axios.create({
-  baseURL: "http://127.0.0.1:5000/api/book",
-});
+// Base: /api/book
 
-API.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    // ONLY logout on explicit 401
-    console.log("Axios error:", err.response?.status, err.config?.url);
+export const getAllBooks = () => api.get("/book");
 
-    if (err.response?.status === 401) {
-      localStorage.removeItem("token");
-      window.location.href = "/login";
-    }
-
-    // NEVER logout on 404
-    return Promise.reject(err);
-  }
-);
-
-
-API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("token");
-  if (token) req.headers.Authorization = `Bearer ${token}`;
-  return req;
-});
-
-export const getAllBooks = () => API.get("/");
-export const getBookById = (id) => API.get(`/${id}`);
-
-
-export const startReading = (id) =>
-  API.post(`/${id}/start`);
-
-export const logSession = (id, data) =>
-  API.post(`/${id}/session`, data);
-
-export const getReadingState = (id) =>
-  API.get(`/${id}/state`);
-
-export const getMySessions = (id) =>
-  API.get(`/${id}/sessions`);
-
-export const getCurrentlyReading = () =>
-  API.get("/reading");
-
-export const getCompletedBooks = () =>
-  API.get("/finished");
+export const getBookById = (id) =>
+  api.get(`/book/${id}`);
 
 export const createBook = (data) =>
-  API.post("/", data);
+  api.post("/book", data);
+
+export const startReading = (id) =>
+  api.post(`/book/${id}/start`);
+
+export const logSession = (id, data) =>
+  api.post(`/book/${id}/session`, data);
+
+export const getReadingState = (id) =>
+  api.get(`/book/${id}/state`);
+
+export const getMySessions = (id) =>
+  api.get(`/book/${id}/sessions`);
+
+export const getCurrentlyReading = () =>
+  api.get("/book/reading");
+
+export const getCompletedBooks = () =>
+  api.get("/book/finished");

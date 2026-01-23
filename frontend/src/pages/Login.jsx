@@ -22,7 +22,7 @@ export default function Login() {
       const res = await loginUser(form);
       localStorage.setItem("token", res.data.token);
       console.log("Yes")
-      navigate("/"); // placeholder route
+      navigate("/home"); // placeholder route
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     }

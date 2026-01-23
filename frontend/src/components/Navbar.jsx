@@ -4,7 +4,7 @@ export default function Navbar() {
   return (
     <nav className="h-14 bg-slate-900 border-b border-slate-800 flex items-center px-8">
       <div className="flex gap-8">
-        <NavItem to="/" label="Home" />
+        <NavItem to="/home" label="Home" />
         <NavItem to="/diet" label="Diet" />
         <NavItem to="/books" label="Books" />
         <NavItem to="/tasks" label="Tasks" />

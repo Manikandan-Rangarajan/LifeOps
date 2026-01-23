@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../../api/axios";
+import { useNotification } from "../../components/NotificationContext";
 
 export default function AddRecipe() {
   const [form, setForm] = useState({
@@ -13,6 +14,7 @@ export default function AddRecipe() {
   });
 
   const [loading, setLoading] = useState(false);
+  const { showNotification } = useNotification();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -35,28 +37,33 @@ export default function AddRecipe() {
         },
       });
 
+      showNotification("Recipe added");
       window.location.href = "/diet";
     } catch (err) {
       console.error(err);
-      alert("Something broke. Check console.");
+      showNotification("Failed to add recipe", "error");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex justify-center py-12 px-4">
+    <div className="min-h-screen flex justify-center py-12 px-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-2xl bg-white rounded-xl shadow-sm border p-8 space-y-6"
+        className="
+          w-full max-w-2xl space-y-6
+          rounded-xl border border-slate-700 bg-slate-800
+          p-8
+        "
       >
-        <h1 className="text-2xl font-semibold text-gray-800">
+        <h1 className="text-2xl font-semibold text-slate-100">
           Add New Recipe
         </h1>
 
         {/* Title */}
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label className="block text-sm font-medium mb-1 text-slate-400">
             Recipe Title
           </label>
           <input
@@ -64,14 +71,18 @@ export default function AddRecipe() {
             value={form.title}
             onChange={handleChange}
             required
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
             placeholder="Chicken Rice Bowl"
+            className="
+              w-full rounded-lg border border-slate-600
+              bg-slate-900 px-3 py-2 text-slate-100
+              focus:outline-none focus:border-slate-400
+            "
           />
         </div>
 
         {/* Ingredients */}
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label className="block text-sm font-medium mb-1 text-slate-400">
             Ingredients (one per line)
           </label>
           <textarea
@@ -80,14 +91,17 @@ export default function AddRecipe() {
             onChange={handleChange}
             rows={4}
             required
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
-            placeholder="Chicken breast&#10;Rice&#10;Salt"
+            className="
+              w-full rounded-lg border border-slate-600
+              bg-slate-900 px-3 py-2 text-slate-100
+            "
+            placeholder={`Chicken breast\nRice\nSalt`}
           />
         </div>
 
         {/* Steps */}
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label className="block text-sm font-medium mb-1 text-slate-400">
             Steps (one per line)
           </label>
           <textarea
@@ -96,8 +110,11 @@ export default function AddRecipe() {
             onChange={handleChange}
             rows={4}
             required
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
-            placeholder="Boil rice&#10;Cook chicken&#10;Mix together"
+            className="
+              w-full rounded-lg border border-slate-600
+              bg-slate-900 px-3 py-2 text-slate-100
+            "
+            placeholder={`Boil rice\nCook chicken\nMix together`}
           />
         </div>
 
@@ -109,7 +126,7 @@ export default function AddRecipe() {
             onChange={handleChange}
             type="number"
             placeholder="Calories"
-            className="border rounded-lg px-3 py-2"
+            className="rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
           />
           <input
             name="protein"
@@ -117,7 +134,7 @@ export default function AddRecipe() {
             onChange={handleChange}
             type="number"
             placeholder="Protein (g)"
-            className="border rounded-lg px-3 py-2"
+            className="rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
           />
           <input
             name="carbs"
@@ -125,7 +142,7 @@ export default function AddRecipe() {
             onChange={handleChange}
             type="number"
             placeholder="Carbs (g)"
-            className="border rounded-lg px-3 py-2"
+            className="rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
           />
           <input
             name="fat"
@@ -133,7 +150,7 @@ export default function AddRecipe() {
             onChange={handleChange}
             type="number"
             placeholder="Fat (g)"
-            className="border rounded-lg px-3 py-2"
+            className="rounded-lg border border-slate-600 bg-slate-900 px-3 py-2 text-slate-100"
           />
         </div>
 
@@ -142,7 +159,11 @@ export default function AddRecipe() {
           <button
             type="button"
             onClick={() => window.history.back()}
-            className="px-4 py-2 rounded-lg border text-gray-600 hover:bg-gray-100"
+            className="
+              px-4 py-2 rounded-lg
+              border border-slate-600
+              text-slate-300 hover:bg-slate-700
+            "
           >
             Cancel
           </button>
@@ -150,7 +171,13 @@ export default function AddRecipe() {
           <button
             type="submit"
             disabled={loading}
-            className="px-6 py-2 rounded-lg bg-black text-white hover:opacity-90 disabled:opacity-50"
+            className="
+              px-6 py-2 rounded-lg
+              bg-emerald-500 text-black font-semibold
+              hover:bg-emerald-400
+              transition active:scale-95
+              disabled:opacity-50
+            "
           >
             {loading ? "Saving..." : "Add Recipe"}
           </button>

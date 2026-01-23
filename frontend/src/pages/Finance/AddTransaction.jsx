@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axios";
+import { useNotification } from "../../components/NotificationContext";
 
 export default function AddTransaction() {
   const [accounts, setAccounts] = useState([]);
@@ -14,6 +15,7 @@ export default function AddTransaction() {
   });
 
   const navigate = useNavigate();
+  const { showNotification } = useNotification(); // ✅ FIXED LOCATION
 
   useEffect(() => {
     api.get("/finance/account").then((res) => {
@@ -27,18 +29,22 @@ export default function AddTransaction() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await api.post("/finance/transaction", {
-      ...form,
+    const payload = {
+      accountId: form.accountId,
       amount: Number(form.amount),
-      date: form.date || new Date(),   
-});
-console.log("Submitting transaction:", {
-  ...form,
-  amount: Number(form.amount),
-  date: form.date || new Date(),
-});
+      type: form.type,
+      category: form.category,
+      note: form.note,
+      date: form.date ? new Date(form.date) : new Date(),
+    };
 
-    navigate("/finance");
+    try {
+      await api.post("/finance/transaction", payload);
+      showNotification("Transaction added");
+      navigate("/finance");
+    } catch (err) {
+      showNotification("Failed to add transaction", "error");
+    }
   };
 
   return (
@@ -49,15 +55,39 @@ console.log("Submitting transaction:", {
       >
         <h1 className="text-xl font-semibold">Add Transaction</h1>
 
-        <select name="type" onChange={handleChange} className="w-full border p-2 rounded">
+        <select
+          name="type"
+          value={form.type}
+          onChange={handleChange}
+          className="w-full border p-2 rounded"
+        >
           <option value="EXPENSE">Expense</option>
           <option value="INCOME">Income</option>
         </select>
 
-        <input name="amount" type="number" placeholder="Amount" required onChange={handleChange} className="w-full border p-2 rounded" />
-        <input name="category" placeholder="Category" required onChange={handleChange} className="w-full border p-2 rounded" />
+        <input
+          name="amount"
+          type="number"
+          placeholder="Amount"
+          required
+          onChange={handleChange}
+          className="w-full border p-2 rounded"
+        />
 
-        <select name="accountId" required onChange={handleChange} className="w-full border p-2 rounded">
+        <input
+          name="category"
+          placeholder="Category"
+          required
+          onChange={handleChange}
+          className="w-full border p-2 rounded"
+        />
+
+        <select
+          name="accountId"
+          required
+          onChange={handleChange}
+          className="w-full border p-2 rounded"
+        >
           <option value="">Select Account</option>
           {accounts.map((a) => (
             <option key={a._id} value={a._id}>
@@ -66,9 +96,19 @@ console.log("Submitting transaction:", {
           ))}
         </select>
 
-        <input name="date" type="date" onChange={handleChange} className="w-full border p-2 rounded" />
+        <input
+          name="date"
+          type="date"
+          onChange={handleChange}
+          className="w-full border p-2 rounded"
+        />
 
-        <textarea name="note" placeholder="Note (optional)" onChange={handleChange} className="w-full border p-2 rounded" />
+        <textarea
+          name="note"
+          placeholder="Note (optional)"
+          onChange={handleChange}
+          className="w-full border p-2 rounded"
+        />
 
         <button className="w-full bg-emerald-500 text-white py-2 rounded">
           Save
