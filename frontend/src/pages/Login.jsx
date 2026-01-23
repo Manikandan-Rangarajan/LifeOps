@@ -22,7 +22,7 @@ export default function Login() {
       const res = await loginUser(form);
       localStorage.setItem("token", res.data.token);
       console.log("Yes")
-      navigate("/dashboard"); // placeholder route
+      navigate("/"); // placeholder route
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     }
@@ -33,7 +33,7 @@ export default function Login() {
   title="Welcome back"
   subtitle="Continue building better habits"
 >
-  <form onSubmit={handleSubmit} className="space-y-4">
+  <form onSubmit={handleSubmit} className="bg-pink-100 space-y-4">
 
     {error && (
       <div className="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
@@ -46,7 +46,7 @@ export default function Login() {
 
     <Button>Sign in</Button>
 
-    <p className="text-center text-sm text-gray-600">
+    <p className="bg-red-100 text-center text-sm text-gray-600">
       Don’t have an account?{" "}
       <a href="/register" className="font-medium text-indigo-600 hover:underline">
         Sign up

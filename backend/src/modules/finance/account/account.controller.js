@@ -61,3 +61,14 @@ export const getAccountBalance = async (req,res)=>{
     return res.status(500).json({message:"Internal server error"})
   }
 } 
+
+export const getAccounts = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const accounts = await Account.find({ userId, active: true });
+    res.status(200).json(accounts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
