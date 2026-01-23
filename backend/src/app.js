@@ -10,6 +10,7 @@ import accountRoutes from "./modules/finance/account/account.routes.js"
 import transactionRoutes from "./modules/finance/transaction/transaction.routes.js"
 import analyticsRoutes from "./modules/finance/analytics/analytics.routes.js"
 import FoodLogRoutes from "./modules/diet/foodLog/foodLog.routes.js"
+import RecipeRoutes from "./modules/diet/recipes/recipe.routes.js"
 
 const app = express() 
 
@@ -24,6 +25,7 @@ app.use('/api/finance/account',accountRoutes)
 app.use('/api/finance/transaction',transactionRoutes)
 app.use('/api/finance/analytics',analyticsRoutes)
 app.use('/api/diet/log',FoodLogRoutes)
+app.use('/api/diet/recipe', RecipeRoutes)
 app.get('/',(req,res)=>{
     res.json({status:'ok'})
 })
