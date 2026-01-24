@@ -1,5 +1,6 @@
 import Account from '../account/account.model.js'
 import Transaction from './transaction.model.js'
+import mongoose from 'mongoose';
 
 export const appendTransaction = async (req, res) => {
   try {

@@ -27,24 +27,29 @@ const modules = [
   },
 ];
 
-
 export default function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-500 to-slate-800 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-slate-500 to-slate-800 p-4 sm:p-6">
       {/* Header */}
-      <div className="mb-12 text-center">
-        <h1 className="text-5xl font-extrabold text-gray-800 tracking-tight">
+      <div className="mb-8 sm:mb-12 text-center">
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-800 tracking-tight">
           LifeOps
         </h1>
-        <p className="text-xl text-gray-900 mt-3">
+        <p className="text-lg sm:text-xl text-gray-900 mt-3">
           Your personal management system
         </p>
       </div>
 
       {/* Cards */}
-      <div className="grid h-[calc(100vh-240px)] grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="
+        grid
+        grid-cols-1
+        sm:grid-cols-2
+        lg:grid-cols-4
+        gap-6 sm:gap-8
+      ">
         {modules.map((mod) => (
           <div
             key={mod.name}
@@ -52,7 +57,7 @@ export default function Home() {
             className={`
               group relative overflow-hidden
               flex flex-col items-center justify-center text-center
-              rounded-3xl p-10 text-white
+              rounded-3xl p-6 sm:p-10 text-white
               bg-gradient-to-br ${mod.gradient}
               cursor-pointer shadow-xl
               transition-all duration-300 ease-out
@@ -63,16 +68,16 @@ export default function Home() {
             {/* soft glass overlay */}
             <div className="absolute inset-0 bg-white/10 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-            <h2 className="relative text-3xl font-bold mb-4">
+            <h2 className="relative text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
               {mod.name}
             </h2>
 
-            <p className="relative text-base opacity-90 mb-8 max-w-[240px] leading-relaxed">
-  {mod.description}
-</p>
+            <p className="relative text-sm sm:text-base opacity-90 mb-6 sm:mb-8 max-w-[240px] leading-relaxed">
+              {mod.description}
+            </p>
 
             {/* Arrow */}
-            <div className="relative flex items-center gap-2 text-lg font-semibold">
+            <div className="relative flex items-center gap-2 text-base sm:text-lg font-semibold">
               <span>Open</span>
               <span className="transform transition-transform duration-300 group-hover:translate-x-2">
                 →
