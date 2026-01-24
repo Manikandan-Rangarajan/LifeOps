@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar";
 
 export default function App() {
   const { pathname } = useLocation();
-  const hideNavbar = pathname === "/login" || pathname === "/register";
+  const hideNavbar = pathname === "/" || pathname === "/register";
 
   return (
     <div className="min-h-screen text-black-700">

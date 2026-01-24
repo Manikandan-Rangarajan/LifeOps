@@ -1,8 +1,13 @@
 import {startReminderJobs} from './reminder.job.js'
 import dotenv from "dotenv"
-dotenv.config()
 
-//const ENABLE_REMINDER = "true"
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
+
+dotenv.config({ path: envFile });
+const ENABLE_REMINDER = "true"
 
 export const startJobs = ()=>{
   console.log("🛠️ Starting background jobs..."); 
