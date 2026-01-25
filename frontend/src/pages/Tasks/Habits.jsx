@@ -11,7 +11,7 @@ export default function Habits() {
   const fetchHabits = async () => {
     try {
       const res = await api.get("/habit");
-      setHabits(res.data.habits || res.data.result);
+      setHabits(res.data.habits || res.data.result || []);
     } catch (err) {
       showNotification("Failed to load habits", "error");
     }
@@ -24,9 +24,9 @@ export default function Habits() {
   const completeHabit = async (id) => {
     try {
       const res = await api.patch(`/habit/${id}/complete`);
-      showNotification(res.data.message || "Habit completed");
+      showNotification(res.data.message || "Habit completed", "success");
       fetchHabits();
-    } catch (err) {
+    } catch {
       showNotification("Failed to complete habit", "error");
     }
   };
@@ -34,9 +34,9 @@ export default function Habits() {
   const pauseHabit = async (id) => {
     try {
       await api.patch(`/habit/${id}/pause`);
-      showNotification("Habit paused");
+      showNotification("Habit paused", "success");
       fetchHabits();
-    } catch (err) {
+    } catch {
       showNotification("Failed to pause habit", "error");
     }
   };
@@ -44,10 +44,23 @@ export default function Habits() {
   const resumeHabit = async (id) => {
     try {
       await api.patch(`/habit/${id}/resume`);
-      showNotification("Habit resumed");
+      showNotification("Habit resumed", "success");
       fetchHabits();
-    } catch (err) {
+    } catch {
       showNotification("Failed to resume habit", "error");
+    }
+  };
+
+  const deleteHabit = async (id) => {
+    const ok = window.confirm("Delete this habit permanently machi?");
+    if (!ok) return;
+
+    try {
+      await api.delete(`/habit/${id}`);
+      showNotification("Habit deleted", "success");
+      fetchHabits();
+    } catch {
+      showNotification("Failed to delete habit", "error");
     }
   };
 
@@ -65,31 +78,26 @@ export default function Habits() {
       </div>
 
       {habits.length === 0 && (
-        <p className="text-slate-500">No habits yet.</p>
+        <p className="text-slate-500">No habits yet machi. Start small.</p>
       )}
 
-      {/* Habit List */}
       {habits.map((h) => (
         <div
           key={h._id}
           className={`rounded-xl border border-slate-700 bg-slate-800
-  p-4 flex justify-between items-center
-            ${!h.active ? "opacity-60" : ""}`}
+          p-4 flex justify-between items-center
+          ${!h.active ? "opacity-60" : ""}`}
         >
-          {/* Left info */}
           <div>
             <p className="font-semibold">{h.title}</p>
             <p className="text-sm text-slate-500">
               🔥 {h.currentStreak} | 🏆 {h.longestStreak}
             </p>
             {!h.active && (
-              <p className="text-xs text-red-500 mt-1">
-                Paused
-              </p>
+              <p className="text-xs text-red-500 mt-1">Paused</p>
             )}
           </div>
 
-          {/* Actions */}
           <div className="flex gap-2">
             {h.active ? (
               <>
@@ -99,10 +107,9 @@ export default function Habits() {
                 >
                   Done
                 </button>
-
                 <button
                   onClick={() => pauseHabit(h._id)}
-                  className="px-3 py-1 border rounded text-slate-600"
+                  className="px-3 py-1 border rounded text-slate-400"
                 >
                   Pause
                 </button>
@@ -115,6 +122,13 @@ export default function Habits() {
                 Resume
               </button>
             )}
+
+            <button
+              onClick={() => deleteHabit(h._id)}
+              className="px-3 py-1 bg-red-600 text-white rounded"
+            >
+              Delete
+            </button>
           </div>
         </div>
       ))}

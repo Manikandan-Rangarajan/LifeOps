@@ -22,6 +22,8 @@ import AddHabit from "../pages/Tasks/AddHabit";
 import Planner from "../pages/Tasks/Planner";
 import AddRecurring from "../pages/Tasks/AddRecurring";
 import AddAccount from "../pages/Finance/AddAccount";
+import AddNewPlanner from "../pages/Tasks/AddNewPlanner";
+import Recurring from "../pages/Tasks/Recurring";
 
 export default function AppRoutes() {
   return (
@@ -51,6 +53,8 @@ export default function AppRoutes() {
       <Route path="/tasks/habits" element={<Habits />} />
       <Route path="/tasks/habits/new" element={<AddHabit />} />
       <Route path="/tasks/planner" element={<Planner />} />
+      <Route path="/tasks/planner/new" element={<AddNewPlanner />} />
+      <Route path="/tasks/recurring" element={<Recurring />}/>
       <Route path="/tasks/recurring/new" element={<AddRecurring />}/>
       
       <Route path="*" element={<Navigate to="/home" />} />

@@ -114,3 +114,50 @@ export const getMonthlyFoodTrend = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" })
   }
 };
+
+export const getWeeklyCalories = async(req,res)=>{
+  try{
+    const userId = req.user.userId
+    const today = new Date()
+    today.setHours(0,0,0,0)
+    const startDate = new Date(today)
+    startDate.setDate(startDate.getDate()-6)
+
+    const logs = await FoodLog.find({
+      userId,
+      date:{
+        $gte: startDate,
+        $lt: today
+      }
+    })
+
+    const map = {}
+
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(startDate);
+      d.setDate(startDate.getDate() + i);
+      const key = d.toISOString().split("T")[0];
+
+      map[key] = {
+        date: key,
+        day: d.toLocaleDateString("en-US", { weekday: "short" }),
+        calories: 0
+      };
+    }
+
+    for (const log of logs) {
+      const key = log.date.toISOString().split("T")[0];
+      if (map[key]) {
+        map[key].calories += log.calories;
+      }
+    }
+
+    res.status(200).json({
+      range: "last_7_days",
+      data: Object.values(map)
+    })
+  }catch(err){
+    console.error(err)
+    return res.status(500).json({message:"Internal server error"})
+  }
+}

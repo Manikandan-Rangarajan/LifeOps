@@ -10,7 +10,7 @@ export default function TasksHome() {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Box title="Habits" onClick={() => navigate("/tasks/habits")} />
         <Box title="Planner" onClick={() => navigate("/tasks/planner")} />
-        <Box title="Recurring" onClick={() => navigate("/tasks/recurring/new")} />
+        <Box title="Recurring" onClick={() => navigate("/tasks/recurring")} />
       </div>
     </div>
   );

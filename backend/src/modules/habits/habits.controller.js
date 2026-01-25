@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import Habit from './habits.model.js'
 
 export const createHabit = async(req,res)=>{
@@ -170,3 +171,27 @@ export const getHabits = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const deleteHabit = async(req,res)=>{
+  try{
+    const userId = req.user.userId
+    const habitId = req.params.habitId
+    
+    if(!mongoose.Types.ObjectId.isValid(habitId)){
+      return res.status(400).json({message:"Invlalid habit Id"})
+    }
+    const habit = await Habit.findOneAndDelete({
+      _id:habitId,
+      userId
+    })
+    if(!habit){
+      return res.status(404).json({message:"Habit not found"})
+    }
+    res.status(200).json({
+      message:"Habit deletd successfully"
+    })
+  }catch(err){
+    console.error(err)
+    return res.status(500).json({message:"Internal server error"})
+  }
+}

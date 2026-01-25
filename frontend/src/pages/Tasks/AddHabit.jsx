@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../../api/axios";
 import { useNavigate } from "react-router-dom";
+import { useNotification } from "../../components/NotificationContext";
 
 export default function AddHabit() {
   const [form, setForm] = useState({
@@ -8,18 +9,27 @@ export default function AddHabit() {
     description: "",
     startDate: "",
   });
+
   const navigate = useNavigate();
+  const { showNotification } = useNotification();
 
   const submit = async (e) => {
-  e.preventDefault();
-  try {
-    await api.post("/habit", form);
-    showNotification("Habit created");
-    navigate("/tasks/habits");
-  } catch {
-    showNotification("Failed to create habit", "error");
-  }
-};
+    e.preventDefault();
+
+    try {
+      await api.post("/habit", form);
+
+      showNotification("Habit created successfully", "success");
+
+      // slight delay = better UX, optional but nice
+      setTimeout(() => {
+        navigate("/tasks/habits");
+      }, 300);
+    } catch (err) {
+      console.error(err);
+      showNotification("Failed to create habit", "error");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -32,20 +42,29 @@ export default function AddHabit() {
         <input
           placeholder="Title"
           required
-          onChange={(e) => setForm({ ...form, title: e.target.value })}
+          value={form.title}
+          onChange={(e) =>
+            setForm({ ...form, title: e.target.value })
+          }
           className="w-full border p-2 rounded"
         />
 
         <textarea
           placeholder="Description"
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          value={form.description}
+          onChange={(e) =>
+            setForm({ ...form, description: e.target.value })
+          }
           className="w-full border p-2 rounded"
         />
 
         <input
           type="date"
           required
-          onChange={(e) => setForm({ ...form, startDate: e.target.value })}
+          value={form.startDate}
+          onChange={(e) =>
+            setForm({ ...form, startDate: e.target.value })
+          }
           className="w-full border p-2 rounded"
         />
 

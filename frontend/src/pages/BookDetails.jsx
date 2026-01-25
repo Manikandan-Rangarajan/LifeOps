@@ -6,6 +6,7 @@ import {
   startReading,
   logSession,
   getMySessions,
+  deleteBook,
 } from "../api/books.api";
 
 export default function BookDetail() {
@@ -17,6 +18,7 @@ export default function BookDetail() {
   const [sessions, setSessions] = useState([]);
   const [endPage, setEndPage] = useState("");
   const [notes, setNotes] = useState("");
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -71,6 +73,22 @@ export default function BookDetail() {
     setNotes("");
   };
 
+  const handleDelete = async () => {
+    const ok = window.confirm(
+      "This will permanently delete this book and all reading data. Continue?"
+    );
+    if (!ok) return;
+
+    try {
+      setDeleting(true);
+      await deleteBook(id);
+      navigate("/books");
+    } catch (err) {
+      alert(err.response?.data?.message || "You are not allowed to delete this book");
+      setDeleting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen px-6 py-8">
       <div className="mx-auto max-w-3xl space-y-6">
@@ -122,11 +140,20 @@ export default function BookDetail() {
           {state?.status === "NOT_STARTED" && (
             <button
               onClick={handleStart}
-              className="mt-4 rounded bg-green-400 px-4 py-2 text-sm font-semibold text-black hover:bg-green-800 transition"
+              className="mt-4 rounded bg-green-400 px-4 py-2 text-sm font-semibold text-black hover:bg-green-500 transition"
             >
               Start Reading
             </button>
           )}
+
+          {/* DELETE — backend decides permission */}
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            className="mt-6 rounded bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-500 disabled:opacity-50"
+          >
+            {deleting ? "Deleting..." : "Delete Book"}
+          </button>
         </div>
 
         {/* Sessions */}

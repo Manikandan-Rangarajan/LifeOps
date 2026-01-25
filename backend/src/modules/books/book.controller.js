@@ -1,6 +1,7 @@
 import Book from './book.model.js'
 import ReadingState from './readingState.model.js'
 import ReadingSession from './readingSession.model.js'
+import mongoose from 'mongoose'
 
 export const startReadingBook = async(req,res)=>{
   try{
@@ -237,6 +238,31 @@ export const getMyReadingSessions = async(req,res)=>{
     res.status(200).json({
       count: sessions.length,
       sessions
+    })
+  }catch(err){
+    console.error(err)
+    return res.status(500).json({message:"Internal server error"})
+  }
+}
+
+export const deleteBook = async(req,res)=>{
+  try{
+    const userId = req.user.userId
+    const bookId = req.params.bookId
+
+    if (!mongoose.Types.ObjectId.isValid(bookId)) {
+      return res.status(400).json({ message: "Invalid book id" });
+    }
+
+    const book = await Book.findOneAndDelete({
+      _id:bookId,
+      createdBy:userId
+    })
+    if(!book){
+      return res.status(404).json({message:"Either book not found or you are not the one created it"})
+    }
+    res.status(200).json({
+      message:"Book deleted successfully"
     })
   }catch(err){
     console.error(err)

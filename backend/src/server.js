@@ -15,10 +15,10 @@ if (!process.env.MONGO_URI) {
 const PORT = process.env.PORT || 5000;
 
 // 🧠 Optional safety: never allow localhost in Docker
-if (process.env.MONGO_URI.includes("localhost")) {
-  console.error("❌ Invalid MONGO_URI: localhost is not allowed in Docker");
-  process.exit(1);
-}
+// if (process.env.MONGO_URI.includes("localhost")) {
+//   console.error("❌ Invalid MONGO_URI: localhost is not allowed in Docker");
+//   process.exit(1);
+// }
 
 mongoose
   .connect(process.env.MONGO_URI)

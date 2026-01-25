@@ -27,3 +27,6 @@ export const getCurrentlyReading = () =>
 
 export const getCompletedBooks = () =>
   api.get("/book/finished");
+
+export const deleteBook = (id) =>
+  api.delete(`/book/${id}`)
