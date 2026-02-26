@@ -1,17 +1,21 @@
-import { consoleChannel } from './channels/console.channel.js'
+import User from "../auth/user.model.js";
+import { consoleChannel } from "./channels/console.channel.js";
+import { emailChannel } from "./channels/email.channel.js";
 
-const channels = [
-  consoleChannel
-]
+export const notify = async ({ type, userId, title, message, meta }) => {
+  const user = await User.findById(userId).lean();
 
-export const notify = ({type, userId, title, message, meta})=>{
-  for(const channel of channels){
-    channel.send({
-      type,
-      userId,
-      title,
-      message,
-      meta
-    })
+  const payload = {
+    user,
+    title,
+    message,
+    meta,
+  };
+
+  consoleChannel.send(payload);
+
+  if (type === "REMINDER") {
+    await emailChannel.send(payload);
   }
-}
+};
+

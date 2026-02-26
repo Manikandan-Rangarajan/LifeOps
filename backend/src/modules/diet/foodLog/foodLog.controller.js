@@ -127,7 +127,7 @@ export const getWeeklyCalories = async(req,res)=>{
       userId,
       date:{
         $gte: startDate,
-        $lt: today
+        $lte: today
       }
     })
 
